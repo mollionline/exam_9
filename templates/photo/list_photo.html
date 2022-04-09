@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block content %}
+    {% load static %}
+    <div class="container">
+        <h3>Список Фоток</h3>
+        <div class="row row-cols-1 align-items-start">
+            {% for photo in photos %}
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            {% if photo.photo %}
+                                <img class="avatar" src="{{ photo.photo.url }}" width="250" height="250"
+                                     alt="user picture" style="border-radius: 100%">
+                            {% else %}
+                                <img style="width: 250px;" src="{% static 'images_common/photo_camera.svg' %}" alt="">
+
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5>{{ photo.sign }}</h5>
+                                <a class="btn btn-info" style="text-decoration: none; color: black; text-align: right"
+                                   href="{% url 'detail_photo' photo.pk %}">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+

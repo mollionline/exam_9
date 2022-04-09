@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'list_photo' %}">Список фото</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="{% url 'user_page' request.user.pk %}">Привет, {{ user.first_name|capfirst }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/accounts/logout/' %} active {% endif %}"
+                           aria-current="page"
+                           href="{% url 'logout' %}">Выйти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/photo/add/' %} active {% endif %}"
+                           aria-current="page"
+                           href="{% url 'create_photo' %}">Добавить фото</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/accounts/login/' %} active {% endif %}"
+                           aria-current="page"
+                           href="{% url 'login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/accounts/register/' %} active {% endif %}"
+                           aria-current="page"
+                           href="{% url 'register' %}">Зарегистрироваться</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <form class="d-flex" method="get">
+            <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" name="search"
+                   value="{{ form.search.value|default:'' }}">
+            <button class="btn btn-outline-success" type="submit">Поиск</button>
+            {% for error in form.search.errors %}
+                <p class="form-error" style="color: red">{{ error }}</p>
+            {% endfor %}
+        </form>
+    </div>
+</nav>

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Пользователь{% endblock %}
+
+{% block content %}
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Личная страница
+                        пользователя {{ user_obj.get_full_name|default:user_obj.username }}</h5>
+                    <p class="card-text">Логин пользователя: {{ user_obj.username }}</p>
+                    <p class="card-text">Имя: {{ user_obj.first_name|default:'не задано' }}</p>
+                    <p class="card-text">Фамилия: {{ user_obj.last_name|default:'не задано' }}</p>
+                    <p class="card-text">О себе: {{ user_obj.email|default:'не заполнено' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="text-center clear">Альбомы автора:</h2>
+
+    {% include 'partial/album/users_album_list.html' %}
+
+{% endblock %}

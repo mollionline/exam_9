@@ -1,0 +1,21 @@
+{% csrf_token %}
+<div class="form-group" style="text-align: left; color: gray">
+    <label for="photo">Фото</label>
+    <input type="file" name='photo' id="photo" value="{{ form.photo.value|default:'' }}"
+           class="form-control {% if form.photo.errors %} is-invalid {% endif %}">
+    {% for error in form.photo.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endfor %}
+</div>
+
+<label for="sign">Подпись</label>
+<input class="form-control {% if form.sign.errors %} is-invalid {% endif %}" id="sign" type="text" name="sign"
+       aria-describedby="name" value="{{ form.sign.value|default:'' }}">
+{% for error in form.sign.errors %}
+    <p class="invalid-feedback">{{ error }}</p>
+{% endfor %}
+
+
+<input type="submit" class="form-control btn btn-secondary" value="{{ button_text }}">
