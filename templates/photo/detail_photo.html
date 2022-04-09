@@ -3,7 +3,7 @@
 {% block content %}
     <div class="card">
         <div class="card-body">
-            <h4>{{ photo.author }}</h4>
+            <h4>{{ photo.author|capfirst }}</h4>
             {% if photo.photo %}
                 <img class="avatar" src="{{ photo.photo.url }}" width="250" height="250"
                      alt="user picture" style="border-radius: 100%">
@@ -13,15 +13,16 @@
 
             <p>Дата создания: {{ photo.created_at|date:'d.m.Y' }}</p>
             {% if user.is_authenticated %}
-                {% if request.user %}
+                {% if request.user == photo.author %}
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">Удалить
                     </button>
+                    <a class="btn btn-success"
+                       aria-current="page"
+                       href="{% url 'update_photo' photo.pk %}">Редактировать фото</a>
                 {% endif %}
             {% endif %}
-            <a class="btn btn-success"
-               aria-current="page"
-               href="{% url 'update_photo' photo.pk %}">Редактировать фото</a>
+
         </div>
     </div>
     {% include 'common/delete_modal.html' with deleted_object=photo %}
