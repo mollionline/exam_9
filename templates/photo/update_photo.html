@@ -3,7 +3,7 @@
 {% block content %}
 
     <h4>Редактировать фото</h4>
-    <form method="POST" action="{% url 'create_photo' %}" style="margin-top: 20px; width: 70%;"
+    <form method="POST" action="{% url 'update_photo' photo.pk %}" style="margin-top: 20px; width: 70%;"
           enctype="multipart/form-data">
         {% csrf_token %}
             {% include 'partial/photo/form_photo.html' with button_text='Редактировать' %}

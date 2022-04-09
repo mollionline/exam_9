@@ -9,8 +9,11 @@
                      alt="user picture" style="border-radius: 100%">
             {% endif %}
             <p>Подпись автора: {{ photo.sign }}</p>
-
-
+            <p>Фото в избранном у пользователей: </p>
+            {% for author in photo.authors.all %}
+                <p class="card-text"></p>
+                <a href="{% url 'user_page' author.author.pk %}">{{ author.author }}</a>
+            {% endfor %}
             <p>Дата создания: {{ photo.created_at|date:'d.m.Y' }}</p>
             {% if user.is_authenticated %}
                 {% if request.user == photo.author %}

@@ -59,9 +59,7 @@ class UpdatePhotoView(PermissionRequiredMixin, UpdateView):
     form_class = PhotoForm
     context_object_name = 'photo'
     permission_required = ''
-
-    def get_success_url(self):
-        return reverse('detail_photo', kwargs={'pk': self.object.photo.pk})
+    success_url = '/'
 
     def has_permission(self):
         return super().has_permission() or self.get_object().author == self.request.user

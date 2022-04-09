@@ -22,8 +22,21 @@
 
 
                                 <p>Дата создания: {{ photo.created_at|date:'d.m.Y' }}</p>
-                                <a class="btn btn-info" style="text-decoration: none; color: black; text-align: right"
-                                   href="{% url 'detail_photo' photo.pk %}">Подробнее</a>
+                                <h5 class="card-title">
+                                    <a class="btn btn-info"
+                                       style="text-decoration: none; color: black; text-align: right"
+                                       href="{% url 'detail_photo' photo.pk %}">Подробнее</a>
+                                    <form action="{% url 'choose_photo' photo.pk %}" method="post" class="btn">
+                                        {% csrf_token %}
+                                        <input src="" width="35px"
+                                               style="border-radius: 5px; margin-left: 5%; color: black; background-color: pink; padding: 5px"
+                                               type="submit"
+                                               class="choose-btn"
+                                               value="В избранное"
+                                               data-post-id="{{ photo.pk }}">
+                                    </form>
+                                </h5>
+
                             </div>
                         </div>
                     </div>
