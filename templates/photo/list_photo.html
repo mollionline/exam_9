@@ -29,11 +29,13 @@
                                     {% if user.is_authenticated %}
                                         <form action="{% url 'choose_photo' photo.pk %}" method="post" class="btn">
                                             {% csrf_token %}
+                                            <input hidden value="{{ photo.pk }}" id="photo_id">
+                                            <input hidden value="{{ request.user }}" id="username">
                                             <input src="" width="35px"
                                                    style="border-radius: 5px; margin-left: 5%; color: black; background-color: pink; padding: 5px"
                                                    type="submit"
                                                    class="choose-btn"
-                                                   value="В избранное"
+                                                   value="Добавить или удалить"
                                                    data-post-id="{{ photo.pk }}">
                                         </form>
                                     {% endif %}
@@ -47,7 +49,27 @@
         </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <script type="application/javascript">
 
+        $(document).ready(function () {
+            $('.choose-btn').click(function (e) {
+                e.preventDefault();
+                const photo = $('#photo_id').val();
+                const user = $('#username').val()
+                $.ajax({
+                    url: `http://localhost:8000/api/v1/choose/${photo}/`,
+                    method: "POST",
+                    headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+                }).then(res => {
+                    console.log(res.choosed)
+                })
+
+            })
+
+        })
+    </script>
 
 {% endblock %}
 

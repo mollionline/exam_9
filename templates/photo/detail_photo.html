@@ -1,41 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <h4>{{ photo.author|capfirst }}</h4>
-            {% if photo.photo %}
-                <img class="avatar" src="{{ photo.photo.url }}" width="250" height="250"
-                     alt="user picture" style="border-radius: 100%">
-            {% endif %}
-            <p>Подпись автора: {{ photo.sign }}</p>
-            <p>Фото в избранном у пользователей: </p>
-            {% for author in photo.authors.all %}
-                <p class="card-text"></p>
-                <a href="{% url 'user_page' author.author.pk %}">{{ author.author }}</a>
-            {% endfor %}
-            <p>Дата создания: {{ photo.created_at|date:'d.m.Y' }}</p>
-            {% if user.is_authenticated %}
-                {% if request.user == photo.author %}
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">Удалить
-                    </button>
-                    <a class="btn btn-success"
-                       aria-current="page"
-                       href="{% url 'update_photo' photo.pk %}">Редактировать фото</a>
-                {% endif %}
-                <form action="{% url 'choose_photo' photo.pk %}" method="post" class="btn">
-                    {% csrf_token %}
-                    <input src="" width="35px"
-                           style="border-radius: 5px; margin-left: 5%; color: black; background-color: pink; padding: 5px"
-                           type="submit"
-                           class="choose-btn"
-                           value="В избранное"
-                           data-post-id="{{ photo.pk }}">
-                </form>
-            {% endif %}
+<div class="card">
+    <div class="card-body">
+        <h4>{{ photo.author|capfirst }}</h4>
+        {% if photo.photo %}
+            <img class="avatar" src="{{ photo.photo.url }}" width="250" height="250"
+                 alt="user picture" style="border-radius: 100%">
+        {% endif %}
+        <p>Подпись автора: {{ photo.sign }}</p>
+        <p>Фото в избранном у пользователей: </p>
+        {% for author in photo.authors.all %}
 
-        </div>
+            <a href="{% url 'user_page' author.author.pk %}">{{ author.author }}</a>
+        {% endfor %}
+        <p class="user_name"></p>
+        <p>Дата создания: {{ photo.created_at|date:'d.m.Y' }}</p>
+        {% if user.is_authenticated %}
+        {% if request.user == photo.author %}
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">Удалить
+            </button>
+            <a class="btn btn-success"
+               aria-current="page"
+               href="{% url 'update_photo' photo.pk %}">Редактировать фото</a>
+        {% endif %}
+
+
+        <form action="{% url 'choose_photo' photo.pk %}" method="post" class="btn">
+            {% csrf_token %}
+            <input hidden value="{{ photo.pk }}" id="photo_id">
+            <input hidden value="{{ request.user }}" id="username">
+            <input src="" width="35px"
+                   style="border-radius: 5px; margin-left: 5%; color: black; background-color: pink; padding: 5px"
+                   type="submit"
+                   class="choose-btn"
+                   value="Добавить или удалить"
+                   data-post-id="{{ photo.pk }}">
+        </form>
+
+
+        {% endif %}
+
     </div>
-    {% include 'common/delete_modal.html' with deleted_object=photo %}
+</div>
+
+{% include 'common/delete_modal.html' with deleted_object=photo %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+<script type="application/javascript">
+
+    $(document).ready(function () {
+        $('.choose-btn').click(function (e) {
+            e.preventDefault();
+            const photo = $('#photo_id').val();
+            const user = $('#username').val()
+            $.ajax({
+                url: `http://localhost:8000/api/v1/choose/${photo}/`,
+                method: "POST",
+                headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+            }).then(res => {
+                console.log(res.choosed)
+            })
+
+        })
+
+    })
+</script>
 {% endblock %}
