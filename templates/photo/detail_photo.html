@@ -61,9 +61,11 @@
                 headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
             }).then(res => {
                 console.log(res.choosed)
+                document.location.reload();
             })
 
         })
+
 
     })
 </script>
